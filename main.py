@@ -13,6 +13,8 @@ def main():
         mfa_secret_key = input("Enter MFA secret key: ")
         config['credentials'] = {'mfa_serial_number': mfa_sn,
                                  'mfa_secret_key': mfa_secret_key}
+        with open('config.ini', 'w') as configfile:
+            config.write(configfile)
     else:
         mfa_sn = config.get('credentials', 'mfa_serial_number')
         mfa_secret_key = config.get('credentials', 'aws_access_key_id')
