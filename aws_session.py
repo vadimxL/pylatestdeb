@@ -3,8 +3,6 @@ import boto3
 from oathtool import generate_otp
 
 EXPIRE_TIME = 129600  # 36 hours
-MFA_SN = "arn:aws:iam::871066970550:mfa/work"
-MFA_SECRET_KEY = "BIHQU5L5GMWPT6TKEQSPQT7GKDB2EQBWQXMG4BAY56XZBPFIK3E2FXNN6KC5GD6B"
 
 
 def _get_aws_credentials(mfa_serial_number, mfa_totp, sts_client):
@@ -30,7 +28,7 @@ def _get_aws_credentials(mfa_serial_number, mfa_totp, sts_client):
     return response
 
 
-def get_aws_credentials(mfa_serial_number=MFA_SN, mfa_secret_key=MFA_SECRET_KEY):
+def get_aws_credentials(mfa_serial_number, mfa_secret_key):
     # check if cached json/aws_credentials.json exists
     # if not, get new credentials
     with Cache('aws') as aws_credentials_cache:
@@ -43,4 +41,4 @@ def get_aws_credentials(mfa_serial_number=MFA_SN, mfa_secret_key=MFA_SECRET_KEY)
 
 
 if __name__ == '__main__':
-    print(get_aws_credentials())
+    print(get_aws_credentials(mfa_serial_number="", mfa_secret_key=""))
