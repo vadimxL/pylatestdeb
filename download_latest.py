@@ -1,41 +1,34 @@
 import os
 from tqdm import tqdm
 import boto3
-import sys
 from boto3.s3.transfer import TransferConfig
 
 
-def download_file(credentials, check_if_exists=True):
+def download_file(credentials, check_if_exists=True, type_='unprotected', prefix='releases/'):
     # Retrieve the list of existing buckets
     s3 = boto3.client('s3', aws_access_key_id=credentials["Credentials"]["AccessKeyId"],
                       aws_secret_access_key=credentials["Credentials"]["SecretAccessKey"],
                       aws_session_token=credentials["Credentials"]["SessionToken"])
 
     # Retrieve the list of objects in the 'releases/' prefix
-    response = s3.list_objects_v2(Bucket='convexum-debs', Prefix='releases/')
+    response = s3.list_objects_v2(Bucket='convexum-debs', Prefix=prefix)
 
     # Initialize variables to store information about the latest file
     latest_file = None
     latest_time = None
 
     for obj in response.get('Contents', []):
-        # Filter for files with 'unprotected' in their key and get the latest one
-        if 'unprotected' in obj['Key']:
+        # Filter for files with type in their key and get the latest one
+        if type_ in obj['Key']:
             if latest_time is None or obj['LastModified'] > latest_time:
                 latest_file = obj
                 latest_time = obj['LastModified']
 
-    print(f'Latest file: {latest_file} ({latest_time})')
+    print(f'Latest file: {latest_file.get("Key")} ({latest_time})')
+    print()
 
     total_length = int(latest_file.get('Size', 0))
     downloaded = 0
-
-    def progress(chunk):
-        nonlocal downloaded
-        downloaded += chunk
-        done = int(50 * downloaded / total_length)
-        sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50 - done)))
-        sys.stdout.flush()
 
     # Download the latest unprotected file
     if latest_file:
@@ -46,11 +39,10 @@ def download_file(credentials, check_if_exists=True):
             if check_if_exists and os.path.isfile(file_name):
                 print(f"File already exists: {file_name}")
                 return
-            with tqdm(total=total_length, unit='B', unit_scale=True, desc='Uploading') as pbar:
+            with tqdm(total=total_length, unit='B', unit_scale=True, desc='Downloading') as pbar:
                 def progress_callback(chunk):
                     nonlocal downloaded
                     downloaded += chunk
-                    done = int(50 * downloaded / total_length)
                     pbar.update(downloaded - pbar.n)
 
                 with open(file_name, 'wb') as f:

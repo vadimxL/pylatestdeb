@@ -17,12 +17,14 @@ def main():
             config.write(configfile)
     else:
         mfa_sn = config.get('credentials', 'mfa_serial_number')
-        mfa_secret_key = config.get('credentials', 'aws_access_key_id')
+        mfa_secret_key = config.get('credentials', 'mfa_secret_key')
 
-    print(mfa_sn)
-    print(mfa_secret_key)
+        if not mfa_sn or not mfa_secret_key:
+            print("MFA credentials not found in config file.")
+            exit(1)
 
-    download_file(get_aws_credentials(mfa_serial_number=mfa_sn, mfa_secret_key=mfa_secret_key), check_if_exists=False)
+    download_file(get_aws_credentials(mfa_serial_number=mfa_sn, mfa_secret_key=mfa_secret_key), check_if_exists=False,
+                  type_='unprotected', prefix='development/')
 
 
 # Press the green button in the gutter to run the script.
