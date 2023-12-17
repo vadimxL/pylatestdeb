@@ -1,8 +1,5 @@
-import enum
-import logging
+
 import os
-import subprocess
-import paramiko
 from tqdm import tqdm
 import pysftp
 
