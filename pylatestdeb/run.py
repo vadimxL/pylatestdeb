@@ -1,6 +1,6 @@
-from aws_session import get_aws_credentials
-from download_latest import download_file
 from configparser import ConfigParser
+from pylatestdeb.aws_session import get_aws_credentials
+from pylatestdeb.download_latest import download_file
 
 
 def main():
