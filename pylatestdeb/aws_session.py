@@ -28,13 +28,15 @@ def _get_aws_credentials(mfa_serial_number, mfa_totp, sts_client):
     return response
 
 
-def get_aws_credentials(mfa_serial_number, mfa_secret_key):
+def get_aws_credentials(mfa_serial_number, mfa_secret_key, aws_access_key_id, aws_secret_access_key):
     # check if cached json/aws_credentials.json exists
     # if not, get new credentials
     with Cache('aws') as aws_credentials_cache:
         aws_credentials = aws_credentials_cache.get('aws_credentials')
         if not aws_credentials:
             mfa_code = generate_otp(mfa_secret_key)
+            boto3.client('sts', aws_access_key_id=aws_access_key_id,
+                         aws_secret_access_key=aws_secret_access_key)
             aws_credentials = _get_aws_credentials(mfa_serial_number, mfa_code, boto3.client('sts'))
             aws_credentials_cache.set('aws_credentials', aws_credentials, expire=EXPIRE_TIME)
         return aws_credentials

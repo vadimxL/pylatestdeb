@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pylatestdeb',
-    version='1.0.3',
+    version='1.0.4',
     description='Utility for download latest deb package from AWS S3 bucket',
     url='https://github.com/vadimxL/pylatestdeb',
     author='Malinovsky Vadim',
