@@ -1,8 +1,8 @@
 from setuptools import setup
 
 setup(
-    name='py',
-    version='0.1.0',
+    name='pylatestdeb',
+    version='1.0',
     description='A example Python package',
     url='https://github.com/shuds13/pyexample',
     author='Malinovsky Vadim',
