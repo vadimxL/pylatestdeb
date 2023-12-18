@@ -34,7 +34,19 @@ def download_file(credentials, check_if_exists=True, type_='unprotected', prefix
     if latest_file:
         file_key = latest_file.get('Key')
         if file_key:
-            file_name = file_key.split('/')[-1]  # Extract filename from the key
+            file_name = file_key.split('/')[-1]
+            tokens = file_name.split('.')
+            name = "".join(tokens[:-2])  # Extract filename from the key
+            suffix = "." + ".".join(tokens[-2:])
+
+            directory = 'downloads/'
+
+            # Creating the directory if it doesn't exist
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+
+            file_name = directory + name + latest_time.strftime("-%m-%d-%Y") + suffix
+            # the filename
             config = TransferConfig(max_concurrency=5)
             if check_if_exists and os.path.isfile(file_name):
                 print(f"File already exists: {file_name}")
