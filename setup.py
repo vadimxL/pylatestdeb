@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pylatestdeb',
-    version='1.1',
+    version='1.0.1',
     description='A example Python package',
     url='https://github.com/vadimxL/pylatestdeb',
     author='Malinovsky Vadim',
@@ -11,7 +11,7 @@ setup(
     packages=['pylatestdeb'],
     entry_points={
         'console_scripts': [
-            'pylatestdeb = pylatestdeb.__main__:main'
+            'pylatestdeb = pylatestdeb.run:main'
         ]
     },
     install_requires=['tqdm',
