@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pylatestdeb',
-    version='1.0.1',
+    version='1.0.2',
     description='A example Python package',
     url='https://github.com/vadimxL/pylatestdeb',
     author='Malinovsky Vadim',
